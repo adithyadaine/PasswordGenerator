@@ -11,8 +11,14 @@
         <h1 class="text-center mb-4">Password Generator</h1>
         <div class="card">
           <div class="card-body">
-            <div id="password" class="text-center"></div>
-            <div id="entropy" class="text-center"></div>
+            <div class="input-group">
+              <input type="text" id="password" class="form-control text-center" readonly>
+              <div class="input-group-append">
+                <button class="btn btn-primary" type="button" onclick="copyPassword()">Copy</button>
+              </div>
+            </div>
+            <div id="copyMessage" class="text-center mt-2"></div>
+            <div id="entropy" class="text-center mt-3"></div>
             <div id="strength" class="text-center"></div>
             <div class="form-group mt-4">
               <label for="length">Password Length: <span id="length-value">12</span></label>
@@ -32,15 +38,10 @@
                 <label class="form-check-label" for="special">Special Characters</label>
               </div>
             </div>
-            <button class="btn btn-primary btn-block" onclick="generatePassword()">Generate Password</button>
+            <button class="btn btn-primary btn-block mt-3" onclick="generatePassword()">Generate Password</button>
           </div>
         </div>
       </div>
     </body>
     <script src="code.js"></script>
-    <script>
-      window.onload = function() {
-        calculateEntropy();
-      };
-    </script>
 </html>

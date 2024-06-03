@@ -40,25 +40,75 @@ function calculateEntropy() {
 
 function generatePassword() {
   const length = parseInt(document.getElementById("length").value);
-  let charset = "";
+  const includeAlphabet = document.getElementById("alphabet").checked;
+  const includeNumber = document.getElementById("number").checked;
+  const includeSpecial = document.getElementById("special").checked;
 
-  if (document.getElementById("alphabet").checked) {
+  let charset = "";
+  let password = "";
+
+  if (includeAlphabet) {
     charset += "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
   }
-  if (document.getElementById("number").checked) {
+  if (includeNumber) {
     charset += "0123456789";
   }
-  if (document.getElementById("special").checked) {
+  if (includeSpecial) {
     charset += "!@#$%^&*()_+";
   }
 
-  let password = "";
-
-  for (let i = 0; i < length; i++) {
-    const randomIndex = Math.floor(Math.random() * charset.length);
-    password += charset[randomIndex];
+  if (charset.length === 0) {
+    alert("Please select at least one character set.");
+    return;
   }
 
-  document.getElementById("password").textContent = password;
+  const charsetLength = charset.length;
+  const charsetArray = charset.split("");
+
+  for (let i = 0; i < length; i++) {
+    if (includeAlphabet && i < length) {
+      const randomIndex = Math.floor(Math.random() * 52);
+      password += "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"[randomIndex];
+      i++;
+    }
+    if (includeNumber && i < length) {
+      const randomIndex = Math.floor(Math.random() * 10);
+      password += "0123456789"[randomIndex];
+      i++;
+    }
+    if (includeSpecial && i < length) {
+      const randomIndex = Math.floor(Math.random() * 12);
+      password += "!@#$%^&*()_+"[randomIndex];
+      i++;
+    }
+
+    if (i < length) {
+      const randomIndex = Math.floor(Math.random() * charsetLength);
+      password += charsetArray[randomIndex];
+    }
+  }
+
+  // Shuffle the generated password
+  password = password.split("").sort(() => Math.random() - 0.5).join("");
+
+  document.getElementById("password").value = password;
   calculateEntropy();
 }
+
+function copyPassword() {
+  const passwordInput = document.getElementById("password");
+  passwordInput.select();
+  passwordInput.setSelectionRange(0, 99999); // For mobile devices
+  document.execCommand("copy");
+  
+  const copyMessage = document.getElementById("copyMessage");
+  copyMessage.textContent = "Password copied to clipboard!";
+  setTimeout(function() {
+    copyMessage.textContent = "";
+  }, 2000);
+}
+
+// Generate password on page load
+window.onload = function() {
+  generatePassword();
+};
