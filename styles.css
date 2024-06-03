@@ -1,26 +1,21 @@
 body {
   padding: 20px;
 }
-
 #password {
   font-size: 24px;
   margin-top: 20px;
   font-weight: bold;
 }
-
 #entropy, #strength {
   font-size: 18px;
   margin-top: 10px;
 }
-
 .weak {
   color: red;
 }
-
 .medium {
   color: orange;
 }
-
 .strong {
   color: green;
 }

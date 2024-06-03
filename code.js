@@ -3,10 +3,6 @@ function updateLengthValue(value) {
   calculateEntropy();
 }
 
-document.getElementById("length").oninput = function() {
-  updateLengthValue(this.value);
-};
-
 function calculateEntropy() {
   const length = parseInt(document.getElementById("length").value);
   let charsetSize = 0;

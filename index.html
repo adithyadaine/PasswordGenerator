@@ -2,9 +2,9 @@
 <html>
     <head>
         <title>Password Generator</title>
+        <link rel="icon" type="image/x-icon" href="16329209.png">
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
         <link rel="stylesheet" href="styles.css">
-
     </head>
     <body>
       <div class="container">
@@ -20,15 +20,15 @@
             </div>
             <div class="form-group">
               <div class="form-check">
-                <input type="checkbox" class="form-check-input" id="alphabet" checked>
+                <input type="checkbox" class="form-check-input" id="alphabet" checked onchange="calculateEntropy()">
                 <label class="form-check-label" for="alphabet">Alphabets</label>
               </div>
               <div class="form-check">
-                <input type="checkbox" class="form-check-input" id="number" checked>
+                <input type="checkbox" class="form-check-input" id="number" checked onchange="calculateEntropy()">
                 <label class="form-check-label" for="number">Numbers</label>
               </div>
               <div class="form-check">
-                <input type="checkbox" class="form-check-input" id="special" checked>
+                <input type="checkbox" class="form-check-input" id="special" checked onchange="calculateEntropy()">
                 <label class="form-check-label" for="special">Special Characters</label>
               </div>
             </div>
@@ -38,4 +38,9 @@
       </div>
     </body>
     <script src="code.js"></script>
+    <script>
+      window.onload = function() {
+        calculateEntropy();
+      };
+    </script>
 </html>
