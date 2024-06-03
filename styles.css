@@ -1,19 +1,23 @@
 body {
-    font-family: Arial, sans-serif;
-    text-align: center;
-  }
-  #password {
-    font-size: 24px;
-    margin-top: 20px;
-  }
-  button {
-    margin-top: 10px;
-    padding: 10px 20px;
-    font-size: 16px;
-  }
-  .length-container {
-    margin-top: 10px;
-  }
-  .checkbox-group {
-    margin-top: 10px;
-  }
+  font-family: Arial, sans-serif;
+  text-align: center;
+}
+#password {
+  font-size: 24px;
+  margin-top: 20px;
+}
+#entropy {
+  font-size: 18px;
+  margin-top: 10px;
+}
+button {
+  margin-top: 10px;
+  padding: 10px 20px;
+  font-size: 16px;
+}
+.length-container {
+  margin-top: 10px;
+}
+.checkbox-group {
+  margin-top: 10px;
+}
