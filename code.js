@@ -23,6 +23,23 @@ function calculateEntropy() {
 
   const entropy = Math.log2(Math.pow(charsetSize, length));
   document.getElementById("entropy").textContent = `Entropy: ${entropy.toFixed(2)} bits`;
+  
+  // Determine password strength based on entropy
+  let strength = "";
+  let strengthClass = "";
+  if (entropy < 50) {
+    strength = "Weak";
+    strengthClass = "weak";
+  } else if (entropy < 80) {
+    strength = "Medium";
+    strengthClass = "medium";
+  } else {
+    strength = "Strong";
+    strengthClass = "strong";
+  }
+  
+  document.getElementById("strength").textContent = `Strength: ${strength}`;
+  document.getElementById("strength").className = strengthClass;
 }
 
 function generatePassword() {

@@ -2,23 +2,40 @@
 <html>
     <head>
         <title>Password Generator</title>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
         <link rel="stylesheet" href="styles.css">
 
     </head>
     <body>
-      <h1>Password Generator</h1>
-      <div id="password"></div>
-      <div id="entropy"></div>
-      <div class="length-container">
-        <label for="length">Password Length: <span id="length-value">12</span></label>
-        <input type="range" id="length" min="4" max="32" value="12" oninput="updateLengthValue(this.value)">
+      <div class="container">
+        <h1 class="text-center mb-4">Password Generator</h1>
+        <div class="card">
+          <div class="card-body">
+            <div id="password" class="text-center"></div>
+            <div id="entropy" class="text-center"></div>
+            <div id="strength" class="text-center"></div>
+            <div class="form-group mt-4">
+              <label for="length">Password Length: <span id="length-value">12</span></label>
+              <input type="range" class="form-control-range" id="length" min="4" max="32" value="12" oninput="updateLengthValue(this.value)">
+            </div>
+            <div class="form-group">
+              <div class="form-check">
+                <input type="checkbox" class="form-check-input" id="alphabet" checked>
+                <label class="form-check-label" for="alphabet">Alphabets</label>
+              </div>
+              <div class="form-check">
+                <input type="checkbox" class="form-check-input" id="number" checked>
+                <label class="form-check-label" for="number">Numbers</label>
+              </div>
+              <div class="form-check">
+                <input type="checkbox" class="form-check-input" id="special" checked>
+                <label class="form-check-label" for="special">Special Characters</label>
+              </div>
+            </div>
+            <button class="btn btn-primary btn-block" onclick="generatePassword()">Generate Password</button>
+          </div>
+        </div>
       </div>
-      <div class="checkbox-group">
-        <label><input type="checkbox" id="alphabet" checked> Alphabets</label>
-        <label><input type="checkbox" id="number" checked> Numbers</label>
-        <label><input type="checkbox" id="special" checked> Special Characters</label>
-      </div>
-      <button onclick="generatePassword()">Generate Password</button>
     </body>
     <script src="code.js"></script>
 </html>
