@@ -40,3 +40,31 @@ body {
   justify-content: center;
   padding: 0 20px;
 }
+
+@media (max-width: 576px) {
+  h1 {
+    font-size: 24px;
+  }
+
+  #password {
+    font-size: 18px;
+  }
+
+  #entropy,
+  #strength {
+    font-size: 16px;
+  }
+
+  .form-group label {
+    font-size: 14px;
+  }
+
+  .form-check-label {
+    font-size: 14px;
+  }
+
+  .btn {
+    font-size: 14px;
+    padding: 8px 16px;
+  }
+}
