@@ -1,3 +1,4 @@
+
 function updateLengthValue(value) {
   document.getElementById("length-value").textContent = value;
   calculateEntropy();
