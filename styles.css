@@ -1,9 +1,40 @@
-html, body {
+/* --- Variable Definitions --- */
+:root {
+  --primary-color-start: #6a11cb; /* Purple */
+  --primary-color-end: #2575fc; /* Blue */
+  --primary-gradient: linear-gradient(
+    to right,
+    var(--primary-color-start),
+    var(--primary-color-end)
+  );
+  --secondary-color: #6c757d; /* Bootstrap secondary grey */
+  --text-color: #343a40; /* Dark grey for text */
+  --text-muted: #6c757d; /* Lighter grey */
+  --body-bg: #f8f9fa; /* Light grey background */
+  --card-bg: #ffffff; /* White card */
+  --border-color: #dee2e6; /* Light border */
+  --border-radius: 8px; /* Consistent border radius */
+  --shadow: 0 6px 15px rgba(0, 0, 0, 0.08); /* Softer shadow */
+
+  --font-primary: 'Poppins', sans-serif;
+  --font-monospace: 'Fira Code', monospace;
+
+  --strength-weak: #dc3545; /* Red */
+  --strength-medium: #fd7e14; /* Orange */
+  --strength-strong: #28a745; /* Green */
+}
+
+/* --- Base Styles --- */
+html,
+body {
   height: 100%;
 }
 
 body {
-  font-size: 16px;
+  font-family: var(--font-primary);
+  font-size: 16px; /* Base font size */
+  color: var(--text-color);
+  background-color: var(--body-bg);
   display: flex;
   flex-direction: column;
 }
@@ -18,99 +49,216 @@ main {
   flex: 1 0 auto;
 }
 
-h1 {
-  font-size: 28px;
-  margin-bottom: 30px;
+/* --- Navbar --- */
+.navbar-brand {
+  font-weight: 600;
 }
 
-#password {
-  font-size: 20px;
-  font-weight: bold;
+.navbar .btn-outline-light {
+  border-radius: var(--border-radius);
+}
+
+/* --- Card --- */
+.card {
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow);
+  border: none; /* Remove default border */
+  width: 100%;
+  max-width: 550px; /* Slightly wider */
+  background-color: var(--card-bg);
+}
+
+.card-body {
+  padding: 35px; /* More padding */
+}
+
+/* --- Typography & Labels --- */
+.label-text {
+  font-weight: 600;
+  color: var(--text-color);
+  margin-bottom: 0.5rem;
+  display: block;
+}
+
+/* --- Custom Range Slider --- */
+.custom-range {
+  width: 100%;
+  height: 8px;
+  cursor: pointer;
+  background: linear-gradient(
+    to right,
+    var(--primary-color-start),
+    var(--primary-color-end)
+  ); /* Use gradient for track */
+  background-size: 100% 100%; /* Ensure gradient covers track */
+  border-radius: 10px;
+  appearance: none; /* Override default */
+  -webkit-appearance: none;
+  outline: none;
+  opacity: 0.9;
+  transition: opacity 0.2s;
+}
+
+.custom-range:hover {
+  opacity: 1;
+}
+
+/* Thumb (handle) for Webkit browsers */
+.custom-range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  background: var(--primary-color-start); /* Solid color for thumb */
+  border-radius: 50%;
+  cursor: pointer;
+  border: 2px solid white;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+}
+
+/* Thumb (handle) for Firefox */
+.custom-range::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  background: var(--primary-color-start);
+  border-radius: 50%;
+  cursor: pointer;
+  border: 2px solid white;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+}
+
+/* --- Custom Checkboxes --- */
+.custom-control-label {
+  cursor: pointer;
+  line-height: 1.5; /* Align text better */
+}
+
+.custom-control-input:checked ~ .custom-control-label::before {
+  background-color: var(--primary-color-start); /* Use primary color */
+  border-color: var(--primary-color-start);
+}
+
+.custom-control-input:focus ~ .custom-control-label::before {
+  box-shadow: 0 0 0 0.2rem rgba(106, 17, 203, 0.25); /* Focus ring matching primary */
+}
+
+.custom-control-input:active ~ .custom-control-label::before {
+  background-color: rgba(106, 17, 203, 0.35); /* Active state */
+}
+
+/* --- Buttons --- */
+.btn {
+  font-size: 1rem;
+  padding: 12px 24px;
+  border-radius: var(--border-radius);
+  font-weight: 600;
+  transition: all 0.3s ease;
+  border: none; /* Remove default borders */
+}
+
+.btn-primary {
+  background: var(--primary-gradient);
+  color: white;
+  position: relative; /* For checkmark positioning */
+  overflow: hidden; /* Hide checkmark initially */
+}
+
+.btn-primary:hover {
+  color: white;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+  transform: translateY(-2px);
+}
+
+.btn-secondary.copy-btn {
+  background-color: var(--secondary-color);
+  color: white;
+  border-top-left-radius: 0; /* Align with input */
+  border-bottom-left-radius: 0;
+}
+
+.btn-secondary.copy-btn:hover {
+  background-color: #5a6268; /* Darken secondary */
+  color: white;
+  transform: translateY(-1px); /* Less lift than primary */
+}
+
+/* --- Password Display --- */
+.password-display {
+  font-size: 1.25rem; /* Larger password text */
+  font-weight: 600;
   padding: 12px;
+  background-color: #e9ecef; /* Light grey background */
+  border: 1px solid var(--border-color);
+  border-right: none; /* Remove border next to copy button */
+  border-radius: var(--border-radius);
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+  font-family: var(--font-monospace); /* Monospace font */
+}
+
+.input-group {
+  align-items: stretch; /* Ensure button height matches input */
+}
+
+.copy-message {
+  color: var(--strength-strong);
+  font-size: 0.9rem;
+  height: 1.5em; /* Reserve space to prevent layout shift */
+}
+
+/* --- Strength Indicator --- */
+.strength-section {
+  margin-top: 25px;
 }
 
 #entropy,
 #strength {
-  font-size: 18px;
-  margin-top: 10px;
+  font-size: 1rem;
+  font-weight: 600;
 }
 
 #strengthExplanation {
-  font-size: 14px;
-  text-align: left;
-  margin-top: 10px;
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  background-color: #f8f9fa; /* Subtle background */
+  padding: 15px;
+  border-radius: var(--border-radius);
+  border: 1px solid var(--border-color);
+}
+
+#strengthExplanation p {
+  margin-bottom: 0.5rem;
+}
+#strengthExplanation p:last-child {
+  margin-bottom: 0;
 }
 
 .weak {
-  color: red;
+  color: var(--strength-weak);
 }
-
 .medium {
-  color: orange;
+  color: var(--strength-medium);
 }
-
 .strong {
-  color: green;
+  color: var(--strength-strong);
 }
 
-.input-group {
-  display: flex;
-  align-items: stretch;
-}
-
-.input-group input {
-  flex: 1;
-}
-
-.input-group button {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0 20px;
-}
-
-.card {
-  border-radius: 10px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  width: 100%;
-  max-width: 500px;
-}
-
-.card-body {
-  padding: 30px;
-}
-
-.form-control-range {
-  width: 100%;
-}
-
-.btn {
-  font-size: 18px;
-  padding: 12px 24px;
-  border-radius: 5px;
-}
-
-footer {
-  background-color: #343a40;
-  color: #fff;
-  padding: 20px 0;
-  flex-shrink: 0;
-}
-
-.social-icons a {
-  color: #fff;
-  margin: 0 10px;
-}
-
+/* --- Button Animations (Generate/Copy) --- */
 .generate-text,
 .copy-text {
-  transition: opacity 0.3s;
+  display: inline-block; /* Ensure it takes space */
+  transition: opacity 0.3s ease-out;
 }
 
 .checkmark {
-  display: none;
+  display: inline-block; /* Use inline-block */
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   opacity: 0;
-  transition: opacity 0.3s;
+  font-size: 1.2em; /* Make checkmark slightly larger */
+  transition: opacity 0.3s ease-in;
 }
 
 .password-generated .generate-text,
@@ -120,47 +268,69 @@ footer {
 
 .password-generated .checkmark,
 .password-copied .checkmark {
-  display: inline-block;
   opacity: 1;
 }
 
-@keyframes fadeInOut {
-  0% {
+/* Optional: Refine checkmark animation if needed */
+@keyframes fadeInCheck {
+  from {
     opacity: 0;
+    transform: translate(-50%, -50%) scale(0.8);
   }
-  50% {
+  to {
     opacity: 1;
-  }
-  100% {
-    opacity: 0;
+    transform: translate(-50%, -50%) scale(1);
   }
 }
 
 .password-generated .checkmark,
 .password-copied .checkmark {
-  animation: fadeInOut 1s ease-in-out;
+  animation: fadeInCheck 0.4s ease-in-out forwards;
 }
 
+/* --- Footer --- */
+.footer {
+  background-color: #343a40; /* Keep dark footer */
+  color: rgba(255, 255, 255, 0.7);
+  padding: 20px 0;
+  flex-shrink: 0; /* Prevent shrinking */
+}
+.footer p {
+  margin-bottom: 0;
+}
+
+/* --- Modal Styles (Inherit most, minor tweaks if needed) --- */
+.modal-content {
+  border-radius: var(--border-radius);
+}
+.modal-header,
+.modal-footer {
+  border-color: var(--border-color);
+}
+.modal-body .form-control {
+  border-radius: var(--border-radius); /* Ensure consistency */
+}
+
+/* --- Responsiveness --- */
 @media (min-width: 576px) {
   body {
-    font-size: 18px;
+    font-size: 17px; /* Slightly larger base font on larger screens */
   }
 
-  h1 {
-    font-size: 36px;
+  .card-body {
+    padding: 40px;
   }
 
-  #password {
-    font-size: 24px;
+  .password-display {
+    font-size: 1.4rem;
   }
 
   #entropy,
   #strength {
-    font-size: 18px;
+    font-size: 1.1rem;
   }
 
   .btn {
-    font-size: 18px;
-    padding: 12px 24px;
+    font-size: 1.1rem;
   }
 }
