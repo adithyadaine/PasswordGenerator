@@ -1,30 +1,34 @@
-/* --- Variable Definitions --- */
+/* --- Variable Definitions for the Dark Theme --- */
 :root {
-  --primary-color-start: #6a11cb; /* Purple */
-  --primary-color-end: #2575fc; /* Blue */
-  --primary-gradient: linear-gradient(
-    to right,
-    var(--primary-color-start),
-    var(--primary-color-end)
-  );
-  --secondary-color: #6c757d; /* Bootstrap secondary grey */
-  --text-color: #343a40; /* Dark grey for text */
-  --text-muted: #6c757d; /* Lighter grey */
-  --body-bg: #f8f9fa; /* Light grey background */
-  --card-bg: #ffffff; /* White card */
-  --border-color: #dee2e6; /* Light border */
-  --border-radius: 8px; /* Consistent border radius */
-  --shadow: 0 6px 15px rgba(0, 0, 0, 0.08); /* Softer shadow */
+  --bg-color: #121826;
+  --card-bg-color: #1d2333;
+  --text-color: #f0f2f5;
+  --muted-text-color: #8a93a5;
+  --border-color: #3e475e;
+
+  /* Monocolor accent replaces the gradient variables */
+  --accent-color: #2575fc; /* For checkboxes, highlights, and buttons */
+  --accent-hover-color: #1a66e0; /* A slightly darker blue for hover */
+
+  --secondary-color: #3e475e;
+  --secondary-hover-color: #4f5a72;
 
   --font-primary: 'Poppins', sans-serif;
   --font-monospace: 'Fira Code', monospace;
+  --border-radius: 8px;
 
-  --strength-weak: #dc3545; /* Red */
-  --strength-medium: #fd7e14; /* Orange */
-  --strength-strong: #28a745; /* Green */
+  --strength-weak: #e54b4b;
+  --strength-medium: #f5a623;
+  --strength-strong: #2ecc71;
 }
 
-/* --- Base Styles --- */
+/* --- Base & Reset Styles --- */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
 html,
 body {
   height: 100%;
@@ -32,207 +36,239 @@ body {
 
 body {
   font-family: var(--font-primary);
-  font-size: 16px; /* Base font size */
+  background-color: var(--bg-color);
   color: var(--text-color);
-  background-color: var(--body-bg);
+  margin: 0;
   display: flex;
   flex-direction: column;
 }
 
-.wrapper {
+/* --- Layout --- */
+.container {
+  width: 100%;
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+main.container {
   flex: 1 0 auto;
   display: flex;
-  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1rem;
 }
 
-main {
-  flex: 1 0 auto;
+article {
+  background-color: var(--card-bg-color);
+  border-radius: var(--border-radius);
+  padding: 2.5rem;
+  width: 100%;
+  max-width: 550px;
+  border: 1px solid var(--border-color);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
 }
 
-/* --- Navbar --- */
-.navbar-brand {
+/* --- Header & Footer --- */
+header nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem 0;
+}
+header nav strong {
+  font-size: 1.25rem;
   font-weight: 600;
 }
-
-.navbar .btn-outline-light {
-  border-radius: var(--border-radius);
-}
-
-/* --- Card --- */
-.card {
-  border-radius: var(--border-radius);
-  box-shadow: var(--shadow);
-  border: none; /* Remove default border */
-  width: 100%;
-  max-width: 550px; /* Slightly wider */
-  background-color: var(--card-bg);
-}
-
-.card-body {
-  padding: 35px; /* More padding */
-}
-
-/* --- Typography & Labels --- */
-.label-text {
-  font-weight: 600;
-  color: var(--text-color);
-  margin-bottom: 0.5rem;
-  display: block;
-}
-
-/* --- Custom Range Slider --- */
-.custom-range {
-  width: 100%;
-  height: 8px;
-  cursor: pointer;
-  background: linear-gradient(
-    to right,
-    var(--primary-color-start),
-    var(--primary-color-end)
-  ); /* Use gradient for track */
-  background-size: 100% 100%; /* Ensure gradient covers track */
-  border-radius: 10px;
-  appearance: none; /* Override default */
-  -webkit-appearance: none;
-  outline: none;
-  opacity: 0.9;
-  transition: opacity 0.2s;
-}
-
-.custom-range:hover {
-  opacity: 1;
-}
-
-/* Thumb (handle) for Webkit browsers */
-.custom-range::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  appearance: none;
-  width: 20px;
-  height: 20px;
-  background: var(--primary-color-start); /* Solid color for thumb */
-  border-radius: 50%;
-  cursor: pointer;
-  border: 2px solid white;
-  box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
-}
-
-/* Thumb (handle) for Firefox */
-.custom-range::-moz-range-thumb {
-  width: 20px;
-  height: 20px;
-  background: var(--primary-color-start);
-  border-radius: 50%;
-  cursor: pointer;
-  border: 2px solid white;
-  box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
-}
-
-/* --- Custom Checkboxes --- */
-.custom-control-label {
-  cursor: pointer;
-  line-height: 1.5; /* Align text better */
-}
-
-.custom-control-input:checked ~ .custom-control-label::before {
-  background-color: var(--primary-color-start); /* Use primary color */
-  border-color: var(--primary-color-start);
-}
-
-.custom-control-input:focus ~ .custom-control-label::before {
-  box-shadow: 0 0 0 0.2rem rgba(106, 17, 203, 0.25); /* Focus ring matching primary */
-}
-
-.custom-control-input:active ~ .custom-control-label::before {
-  background-color: rgba(106, 17, 203, 0.35); /* Active state */
+footer {
+  flex-shrink: 0;
+  text-align: center;
+  padding: 1.5rem 0;
+  color: var(--muted-text-color);
+  font-size: 0.9rem;
 }
 
 /* --- Buttons --- */
-.btn {
+button,
+.button {
+  font-family: var(--font-primary);
   font-size: 1rem;
   padding: 12px 24px;
   border-radius: var(--border-radius);
   font-weight: 600;
-  transition: all 0.3s ease;
-  border: none; /* Remove default borders */
+  transition: all 0.2s ease-in-out;
+  border: none;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
 }
 
-.btn-primary {
-  background: var(--primary-gradient);
+/* Generate Button */
+.generate-btn {
+  background-color: var(--accent-color);
   color: white;
-  position: relative; /* For checkmark positioning */
-  overflow: hidden; /* Hide checkmark initially */
+  width: 100%;
+  margin: 1.5rem 0;
 }
-
-.btn-primary:hover {
-  color: white;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+.generate-btn:hover {
+  background-color: var(--accent-hover-color);
   transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
 }
 
-.btn-secondary.copy-btn {
+/* Copy Button */
+.copy-btn {
   background-color: var(--secondary-color);
-  color: white;
-  border-top-left-radius: 0; /* Align with input */
-  border-bottom-left-radius: 0;
+  color: var(--text-color);
+  width: 100%;
+}
+.copy-btn:hover {
+  background-color: var(--secondary-hover-color);
 }
 
-.btn-secondary.copy-btn:hover {
-  background-color: #5a6268; /* Darken secondary */
-  color: white;
-  transform: translateY(-1px); /* Less lift than primary */
+/* Settings Button (outline) */
+#open-settings-btn {
+  background-color: transparent;
+  border: 2px solid var(--border-color);
+  color: var(--text-color);
+}
+#open-settings-btn:hover {
+  background-color: var(--border-color);
 }
 
-/* --- Password Display --- */
-.password-display {
-  font-size: 1.25rem; /* Larger password text */
+/* --- Form Elements --- */
+label {
+  display: block;
+  margin-bottom: 0.75rem;
   font-weight: 600;
-  padding: 12px;
-  background-color: #e9ecef; /* Light grey background */
+}
+
+#password {
+  font-family: var(--font-monospace);
+  font-size: 1.25rem;
+  text-align: center;
+  font-weight: 600;
+  background-color: var(--bg-color);
   border: 1px solid var(--border-color);
-  border-right: none; /* Remove border next to copy button */
   border-radius: var(--border-radius);
-  border-top-right-radius: 0;
-  border-bottom-right-radius: 0;
-  font-family: var(--font-monospace); /* Monospace font */
+  color: var(--text-color);
+  padding: 12px;
+  width: 100%;
+  box-sizing: border-box;
+  margin-bottom: 1rem;
 }
 
-.input-group {
-  align-items: stretch; /* Ensure button height matches input */
+/* Custom Range Slider */
+input[type='range'] {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 6px;
+  background: var(--secondary-color);
+  border-radius: 5px;
+  outline: none;
+  margin: 1rem 0 2rem 0;
+}
+input[type='range']::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 22px;
+  height: 22px;
+  background: var(--accent-color);
+  border-radius: 50%;
+  cursor: pointer;
+  border: 3px solid var(--card-bg-color);
+}
+input[type='range']::-moz-range-thumb {
+  width: 22px;
+  height: 22px;
+  background: var(--accent-color);
+  border-radius: 50%;
+  cursor: pointer;
+  border: 3px solid var(--card-bg-color);
 }
 
+/* Custom Checkboxes */
+fieldset {
+  border: none;
+  padding: 0;
+  margin: 0;
+}
+fieldset legend {
+  font-size: 1rem;
+  font-weight: 600;
+  padding: 0;
+  margin-bottom: 1rem;
+}
+fieldset label {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  font-weight: normal;
+}
+input[type='checkbox'] {
+  -webkit-appearance: none;
+  appearance: none;
+  background-color: transparent;
+  margin-right: 0.75rem;
+  width: 22px;
+  height: 22px;
+  border: 2px solid var(--border-color);
+  border-radius: 5px;
+  cursor: pointer;
+  display: grid;
+  place-content: center;
+  transition: background-color 0.2s;
+}
+input[type='checkbox']::before {
+  content: '';
+  width: 12px;
+  height: 12px;
+  transform: scale(0);
+  transition: 120ms transform ease-in-out;
+  box-shadow: inset 1em 1em var(--text-color);
+  background-color: var(--text-color);
+  transform-origin: bottom left;
+  clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%);
+}
+input[type='checkbox']:checked {
+  background-color: var(--accent-color);
+  border-color: var(--accent-color);
+}
+input[type='checkbox']:checked::before {
+  transform: scale(1);
+}
+
+/* --- Strength Info & Messages --- */
+.strength-section {
+  text-align: center;
+  margin-top: 2rem;
+}
+#entropy,
+#strength {
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+#strengthExplanation {
+  background-color: var(--bg-color);
+  padding: 1rem;
+  border-radius: var(--border-radius);
+  border: 1px solid var(--border-color);
+  margin-top: 1rem;
+  font-size: 0.9rem;
+  text-align: left;
+  color: var(--muted-text-color);
+}
+#strengthExplanation strong {
+  color: var(--text-color);
+}
 .copy-message {
   color: var(--strength-strong);
   font-size: 0.9rem;
-  height: 1.5em; /* Reserve space to prevent layout shift */
+  min-height: 1.5em;
+  text-align: center;
+  margin-top: 0.5rem;
 }
-
-/* --- Strength Indicator --- */
-.strength-section {
-  margin-top: 25px;
-}
-
-#entropy,
-#strength {
-  font-size: 1rem;
-  font-weight: 600;
-}
-
-#strengthExplanation {
-  font-size: 0.9rem;
-  color: var(--text-muted);
-  background-color: #f8f9fa; /* Subtle background */
-  padding: 15px;
-  border-radius: var(--border-radius);
-  border: 1px solid var(--border-color);
-}
-
-#strengthExplanation p {
-  margin-bottom: 0.5rem;
-}
-#strengthExplanation p:last-child {
-  margin-bottom: 0;
-}
-
 .weak {
   color: var(--strength-weak);
 }
@@ -243,94 +279,89 @@ main {
   color: var(--strength-strong);
 }
 
-/* --- Button Animations (Generate/Copy) --- */
+/* --- Button Animations (Same as before) --- */
 .generate-text,
 .copy-text {
-  display: inline-block; /* Ensure it takes space */
+  display: inline-block;
   transition: opacity 0.3s ease-out;
 }
-
 .checkmark {
-  display: inline-block; /* Use inline-block */
+  display: inline-block;
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
   opacity: 0;
-  font-size: 1.2em; /* Make checkmark slightly larger */
+  font-size: 1.2em;
   transition: opacity 0.3s ease-in;
 }
-
 .password-generated .generate-text,
 .password-copied .copy-text {
   opacity: 0;
 }
-
 .password-generated .checkmark,
 .password-copied .checkmark {
   opacity: 1;
 }
 
-/* Optional: Refine checkmark animation if needed */
-@keyframes fadeInCheck {
-  from {
-    opacity: 0;
-    transform: translate(-50%, -50%) scale(0.8);
-  }
-  to {
-    opacity: 1;
-    transform: translate(-50%, -50%) scale(1);
-  }
-}
-
-.password-generated .checkmark,
-.password-copied .checkmark {
-  animation: fadeInCheck 0.4s ease-in-out forwards;
-}
-
-/* --- Footer --- */
-.footer {
-  background-color: #343a40; /* Keep dark footer */
-  color: rgba(255, 255, 255, 0.7);
-  padding: 20px 0;
-  flex-shrink: 0; /* Prevent shrinking */
-}
-.footer p {
-  margin-bottom: 0;
-}
-
-/* --- Modal Styles (Inherit most, minor tweaks if needed) --- */
-.modal-content {
+/* --- Modal --- */
+dialog {
+  background-color: var(--card-bg-color);
+  color: var(--text-color);
+  border: 1px solid var(--border-color);
   border-radius: var(--border-radius);
+  padding: 0;
+  max-width: 550px;
+  width: 90%;
 }
-.modal-header,
-.modal-footer {
-  border-color: var(--border-color);
+dialog::backdrop {
+  background-color: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
 }
-.modal-body .form-control {
-  border-radius: var(--border-radius); /* Ensure consistency */
+dialog header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid var(--border-color);
 }
-
-/* --- Responsiveness --- */
-@media (min-width: 576px) {
-  body {
-    font-size: 17px; /* Slightly larger base font on larger screens */
-  }
-
-  .card-body {
-    padding: 40px;
-  }
-
-  .password-display {
-    font-size: 1.4rem;
-  }
-
-  #entropy,
-  #strength {
-    font-size: 1.1rem;
-  }
-
-  .btn {
-    font-size: 1.1rem;
-  }
+dialog header h5 {
+  margin: 0;
+  font-size: 1.2rem;
+}
+dialog article > footer {
+  padding: 1rem 1.5rem;
+  border-top: 1px solid var(--border-color);
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+}
+dialog article > footer button.secondary {
+  background-color: var(--secondary-color);
+  color: var(--text-color);
+}
+dialog article > footer button.secondary:hover {
+  background-color: var(--secondary-hover-color);
+}
+dialog article > footer button#save-settings-btn {
+  background-color: var(--accent-color);
+  color: var(--text-color);
+}
+dialog article > footer button#save-settings-btn:hover {
+  background-color: var(--accent-hover-color);
+}
+dialog .close {
+  background: transparent;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: var(--muted-text-color);
+  padding: 0;
+}
+dialog input[type='number'] {
+  background-color: var(--bg-color);
+  border: 1px solid var(--border-color);
+  color: var(--text-color);
+  border-radius: var(--border-radius);
+  padding: 0.75rem;
 }

@@ -1,11 +1,13 @@
-<!DOCTYPE html>
-<html>
+<!doctype html>
+<html lang="en">
   <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Password Generator</title>
-    <link
-      rel="stylesheet"
-      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
-    />
+
+    <!-- This assumes you have a styles.css file in the same folder -->
+    <link rel="stylesheet" href="styles.css" />
+
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -13,255 +15,137 @@
       href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Fira+Code&display=swap"
       rel="stylesheet"
     />
-    <!-- Keep Font Awesome if needed, though not heavily used in base UI -->
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
-    />
-    <!-- Link to Updated Stylesheet -->
-    <link rel="stylesheet" href="styles.css" />
-    <!-- Favicon -->
+
+    <!-- Favicon (Update path if needed) -->
     <link
       rel="icon"
       type="image/png"
       href="img/static/password-generator.png"
     />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   </head>
   <body>
-    <div class="wrapper">
-      <header>
-        <!-- Navbar remains structurally the same, styling handled in CSS -->
-        <nav class="navbar navbar-dark bg-dark">
-          <a class="navbar-brand" href="#">Password Generator</a>
-          <button class="btn btn-outline-light" onclick="openSettingsModal()">
-            Settings
-          </button>
-        </nav>
-      </header>
+    <!-- Header -->
+    <header class="container">
+      <nav>
+        <strong>Password Generator</strong>
+        <button class="contrast outline" id="open-settings-btn">
+          Settings
+        </button>
+      </nav>
+    </header>
 
-      <main
-        class="container my-4 d-flex justify-content-center align-items-center flex-grow-1"
-      >
-        <div class="card">
-          <div class="card-body">
-            <!-- Password Length -->
-            <div class="form-group mb-4">
-              <label for="length" class="font-weight-bold label-text"
-                >Password Length: <span id="length-value">12</span></label
-              >
-              <input
-                type="range"
-                class="form-control-range mt-2 custom-range"
-                id="length"
-                min="4"
-                max="32"
-                value="12"
-                oninput="updateLengthValue(this.value)"
-              />
-            </div>
+    <!-- Main content area -->
+    <main class="container">
+      <article>
+        <!-- Password Length -->
+        <label for="length">
+          Password Length: <span id="length-value">12</span>
+        </label>
+        <input
+          type="range"
+          id="length"
+          name="length"
+          min="4"
+          max="32"
+          value="12"
+        />
 
-            <!-- Character Sets -->
-            <div class="form-group mb-4">
-              <label class="font-weight-bold label-text"
-                >Character Sets:</label
-              >
-              <!-- Custom Checkboxes -->
-              <div class="custom-control custom-checkbox mb-2">
-                <input
-                  type="checkbox"
-                  class="custom-control-input"
-                  id="alphabet"
-                  checked
-                  onchange="calculateEntropy()"
-                />
-                <label class="custom-control-label" for="alphabet"
-                  >Alphabets (a-z, A-Z)</label
-                >
-              </div>
-              <div class="custom-control custom-checkbox mb-2">
-                <input
-                  type="checkbox"
-                  class="custom-control-input"
-                  id="number"
-                  checked
-                  onchange="calculateEntropy()"
-                />
-                <label class="custom-control-label" for="number"
-                  >Numbers (0-9)</label
-                >
-              </div>
-              <div class="custom-control custom-checkbox">
-                <input
-                  type="checkbox"
-                  class="custom-control-input"
-                  id="special"
-                  checked
-                  onchange="calculateEntropy()"
-                />
-                <label class="custom-control-label" for="special"
-                  >Special Characters (!@#$%^&*()_+)</label
-                >
-              </div>
-            </div>
+        <!-- Character Sets -->
+        <fieldset>
+          <legend>Character Sets</legend>
+          <label for="alphabet">
+            <input type="checkbox" id="alphabet" name="alphabet" checked />
+            Alphabets (a-z, A-Z)
+          </label>
+          <label for="number">
+            <input type="checkbox" id="number" name="number" checked />
+            Numbers (0-9)
+          </label>
+          <label for="special">
+            <input type="checkbox" id="special" name="special" checked />
+            Special Characters (!@#$...)
+          </label>
+        </fieldset>
 
-            <!-- Generate Button -->
-            <button
-              class="btn btn-primary btn-block mt-4 mb-4"
-              onclick="generatePassword()"
-            >
-              <span class="generate-text">Generate Password</span>
-              <span class="checkmark">&#10004;</span>
-            </button>
+        <!-- Generate Button -->
+        <button class="generate-btn">
+          <span class="generate-text">Generate Password</span>
+          <span class="checkmark">&#10004;</span>
+        </button>
 
-            <!-- Password Display and Copy -->
-            <div class="input-group mt-4">
-              <input
-                type="text"
-                id="password"
-                class="form-control text-center password-display"
-                readonly
-              />
-              <div class="input-group-append">
-                <button
-                  class="btn btn-secondary copy-btn"
-                  type="button"
-                  onclick="copyPassword()"
-                >
-                  <span class="copy-text">Copy</span>
-                  <span class="checkmark">&#10004;</span>
-                </button>
-              </div>
-            </div>
-            <div id="copyMessage" class="text-center mt-2 copy-message"></div>
+        <!-- Password Display (no longer in a grid) -->
+        <input
+          type="text"
+          id="password"
+          readonly
+          placeholder="Your password will appear here"
+        />
+        <!-- Copy Button (now on its own line) -->
+        <button class="copy-btn secondary">
+          <span class="copy-text">Copy</span>
+          <span class="checkmark">&#10004;</span>
+        </button>
 
-            <!-- Strength Info -->
-            <div class="mt-4 text-center strength-section">
-              <div id="entropy" class="mb-1"></div>
-              <div id="strength" class="mb-2"></div>
-              <div id="strengthExplanation" class="mt-2 text-left"></div>
-            </div>
-          </div>
-          <!-- /card-body -->
-        </div>
-        <!-- /card -->
-      </main>
+        <div id="copyMessage" class="copy-message"></div>
 
-      <footer class="footer bg-dark text-light text-center py-3">
-        <p>&copy; 2025 Password Generator. Maintained with ❤️ by Adithya D M.</p>
-      </footer>
-    </div>
-    <!-- /wrapper -->
+        <!-- Strength Info -->
+        <section class="strength-section">
+          <div id="entropy"></div>
+          <strong id="strength"></strong>
+          <div id="strengthExplanation"></div>
+        </section>
+      </article>
+    </main>
 
-    <!-- Settings Modal (Structure remains the same, inherits some new styles) -->
-    <div
-      class="modal fade"
-      id="settingsModal"
-      tabindex="-1"
-      role="dialog"
-      aria-labelledby="settingsModalLabel"
-      aria-hidden="true"
-    >
-      <div class="modal-dialog" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="settingsModalLabel">
-              Password Generator Settings
-            </h5>
-            <button
-              type="button"
-              class="close"
-              data-dismiss="modal"
-              aria-label="Close"
-            >
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-          <div class="modal-body">
-            <!-- Use custom checkboxes in modal too -->
-            <div class="form-group">
-              <div class="custom-control custom-checkbox mb-2">
-                <input
-                  type="checkbox"
-                  class="custom-control-input"
-                  id="excludeSimilar"
-                />
-                <label class="custom-control-label" for="excludeSimilar"
-                  >Exclude Similar Characters (e.g., "i", "l", "1", "O",
-                  "0")</label
-                >
-              </div>
-            </div>
-            <div class="form-group">
-              <div class="custom-control custom-checkbox mb-2">
-                <input
-                  type="checkbox"
-                  class="custom-control-input"
-                  id="includeUppercase"
-                  checked
-                />
-                <label class="custom-control-label" for="includeUppercase"
-                  >Include Uppercase Letters</label
-                >
-              </div>
-            </div>
-            <div class="form-group">
-              <label for="minAlphabet">Minimum Alphabet Characters:</label>
-              <input
-                type="number"
-                class="form-control"
-                id="minAlphabet"
-                min="0"
-                value="1"
-              />
-            </div>
-            <div class="form-group">
-              <label for="minNumber">Minimum Number Characters:</label>
-              <input
-                type="number"
-                class="form-control"
-                id="minNumber"
-                min="0"
-                value="1"
-              />
-            </div>
-            <div class="form-group">
-              <label for="minSpecial">Minimum Special Characters:</label>
-              <input
-                type="number"
-                class="form-control"
-                id="minSpecial"
-                min="0"
-                value="1"
-              />
-            </div>
-          </div>
-          <div class="modal-footer">
-            <button
-              type="button"
-              class="btn btn-secondary"
-              data-dismiss="modal"
-            >
-              Close
-            </button>
-            <button
-              type="button"
-              class="btn btn-primary"
-              onclick="saveSettings()"
-            >
-              Save Changes
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
-    <!-- /modal -->
+    <!-- Footer -->
+    <footer class="container">
+      <small>&copy; 2025 Password Generator. Maintained with ❤️ by Adithya D M.</small>
+    </footer>
 
-    <!-- Scripts -->
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <!-- Modal for Settings -->
+    <dialog id="settings-modal">
+      <article>
+        <header>
+          <h5>Settings</h5>
+          <button
+            aria-label="Close"
+            class="close"
+            data-target="settings-modal"
+          ></button>
+        </header>
+
+        <fieldset>
+          <label for="excludeSimilar">
+            <input type="checkbox" id="excludeSimilar" name="excludeSimilar" />
+            Exclude Similar Characters (i, l, 1, O, 0)
+          </label>
+        </fieldset>
+        <fieldset>
+          <label for="includeUppercase">
+            <input
+              type="checkbox"
+              id="includeUppercase"
+              name="includeUppercase"
+              checked
+            />
+            Include Uppercase Letters
+          </label>
+        </fieldset>
+        <label for="minAlphabet">Minimum Alphabet Characters</label>
+        <input type="number" id="minAlphabet" value="1" min="0" />
+        <label for="minNumber">Minimum Number Characters</label>
+        <input type="number" id="minNumber" value="1" min="0" />
+        <label for="minSpecial">Minimum Special Characters</label>
+        <input type="number" id="minSpecial" value="1" min="0" />
+
+        <footer>
+          <button class="secondary" data-target="settings-modal">Close</button>
+          <button id="save-settings-btn">Save Changes</button>
+        </footer>
+      </article>
+    </dialog>
+
+    <!-- Script must be at the end of the body -->
     <script src="code.js"></script>
-    <!-- code.js remains the same -->
   </body>
 </html>

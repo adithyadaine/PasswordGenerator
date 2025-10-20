@@ -4,195 +4,240 @@ let settings = {
   includeUppercase: true,
   minAlphabet: 1,
   minNumber: 1,
-  minSpecial: 1
+  minSpecial: 1,
 };
 
-// Load settings from local storage if available
-loadSettings();
+/**
+ * Shuffles an array in place using the Fisher-Yates (aka Knuth) Shuffle.
+ * This is a cryptographically sound way to randomize an array.
+ * @param {Array} array The array to shuffle.
+ */
+function shuffleArray(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const random = new Uint32Array(1);
+    window.crypto.getRandomValues(random);
+    const j = Math.floor((random[0] / (0xffffffff + 1)) * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+}
 
 function updateLengthValue(value) {
-  document.getElementById("length-value").textContent = value;
+  document.getElementById('length-value').textContent = value;
   calculateEntropy();
 }
 
 function calculateEntropy() {
-  const length = parseInt(document.getElementById("length").value);
+  const length = parseInt(document.getElementById('length').value);
   let charsetSize = 0;
 
-  if (document.getElementById("alphabet").checked) {
-    charsetSize += settings.includeUppercase ? 52 : 26;
+  if (document.getElementById('alphabet').checked) {
+    let alphaSize = 26; // lowercase
+    if (settings.includeUppercase) alphaSize += 26; // uppercase
+    if (settings.excludeSimilar) alphaSize -= 6; // i, l, 1, O, 0 (approx)
+    charsetSize += alphaSize;
   }
-  if (document.getElementById("number").checked) {
-    charsetSize += 10;
+  if (document.getElementById('number').checked) {
+    charsetSize += settings.excludeSimilar ? 8 : 10;
   }
-  if (document.getElementById("special").checked) {
-    charsetSize += 12;
-  }
-
-  const entropy = Math.log2(Math.pow(charsetSize, length));
-  document.getElementById("entropy").textContent = `Entropy: ${entropy.toFixed(2)} bits`;
-  
-  // Determine password strength based on entropy
-  let strength = "";
-  let strengthClass = "";
-  let explanation = "";
-  let suggestions = "";
-
-  if (entropy < 50) {
-    strength = "Weak";
-    strengthClass = "weak";
-    explanation = "The password is considered weak because it has low entropy. It may be easily guessable or vulnerable to brute-force attacks.";
-    suggestions = "To improve the password strength, consider increasing the length, adding more character types, and avoiding common patterns or words.";
-  } else if (entropy < 80) {
-    strength = "Medium";
-    strengthClass = "medium";
-    explanation = "The password has moderate entropy and provides a reasonable level of security. However, it can still be improved to enhance its strength.";
-    suggestions = "To further strengthen the password, try increasing the length and incorporating a mix of uppercase letters, lowercase letters, numbers, and special characters.";
-  } else {
-    strength = "Strong";
-    strengthClass = "strong";
-    explanation = "The password has high entropy and is considered strong. It offers a high level of security and is resistant to common attacks.";
-    suggestions = "Maintain the current password length and continue to use a diverse set of characters to ensure a strong password.";
-  }
-  
-  document.getElementById("strength").textContent = `Strength: ${strength}`;
-  document.getElementById("strength").className = strengthClass;
-
-  document.getElementById("strengthExplanation").innerHTML = `
-    <p>${explanation}</p>
-    <p><strong>Suggestions:</strong> ${suggestions}</p>
-  `;
-}
-
-function generatePassword() {
-  const length = parseInt(document.getElementById("length").value);
-  const includeAlphabet = document.getElementById("alphabet").checked;
-  const includeNumber = document.getElementById("number").checked;
-  const includeSpecial = document.getElementById("special").checked;
-
-  let charset = "";
-  let password = "";
-
-  if (includeAlphabet) {
-    charset += "abcdefghijklmnopqrstuvwxyz";
-    if (settings.includeUppercase) {
-      charset += "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-    }
-  }
-  if (includeNumber) {
-    charset += "0123456789";
-  }
-  if (includeSpecial) {
-    charset += "!@#$%^&*()_+";
+  if (document.getElementById('special').checked) {
+    charsetSize += 12; // Based on your special character set
   }
 
-  if (settings.excludeSimilar) {
-    charset = charset.replace(/[il]/g, "");
-  }
-
-  if (charset.length === 0) {
-    alert("Please select at least one character set.");
+  if (charsetSize === 0) {
+    document.getElementById('entropy').textContent = 'Entropy: 0.00 bits';
+    document.getElementById('strength').textContent = 'Strength: Very Weak';
+    document.getElementById('strength').className = 'weak';
+    document.getElementById('strengthExplanation').innerHTML =
+      '<p>Please select at least one character set to generate a password.</p>';
     return;
   }
 
-  const charsetLength = charset.length;
-  const charsetArray = charset.split("");
+  const entropy = Math.log2(Math.pow(charsetSize, length));
+  document.getElementById('entropy').textContent = `Entropy: ${entropy.toFixed(
+    2,
+  )} bits`;
 
-  // Generate password with minimum character type requirements
-  let alphabetCount = 0;
-  let numberCount = 0;
-  let specialCount = 0;
+  let strength = '',
+    strengthClass = '',
+    explanation = '',
+    suggestions = '';
 
-  while (password.length < length) {
-    const randomIndex = Math.floor(Math.random() * charsetLength);
-    const character = charsetArray[randomIndex];
+  if (entropy < 50) {
+    strength = 'Weak';
+    strengthClass = 'weak';
+    explanation =
+      'This password has low entropy and may be vulnerable to brute-force attacks.';
+    suggestions =
+      'Increase the password length or include more character types (like numbers and symbols).';
+  } else if (entropy < 80) {
+    strength = 'Medium';
+    strengthClass = 'medium';
+    explanation =
+      'This password has moderate entropy and provides a reasonable level of security.';
+    suggestions =
+      'To make it stronger, consider adding a few more characters to its length.';
+  } else {
+    strength = 'Strong';
+    strengthClass = 'strong';
+    explanation =
+      'This password has high entropy, offering excellent security against common attacks.';
+    suggestions =
+      'This is a great password. Maintain this length and character complexity for other accounts.';
+  }
 
-    if (includeAlphabet && /[a-zA-Z]/.test(character) && alphabetCount < settings.minAlphabet) {
-      password += character;
-      alphabetCount++;
-    } else if (includeNumber && /[0-9]/.test(character) && numberCount < settings.minNumber) {
-      password += character;
-      numberCount++;
-    } else if (includeSpecial && /[!@#$%^&*()_+]/.test(character) && specialCount < settings.minSpecial) {
-      password += character;
-      specialCount++;
-    } else if (alphabetCount >= settings.minAlphabet && numberCount >= settings.minNumber && specialCount >= settings.minSpecial) {
-      password += character;
+  document.getElementById('strength').textContent = `Strength: ${strength}`;
+  document.getElementById('strength').className = strengthClass;
+  document.getElementById(
+    'strengthExplanation',
+  ).innerHTML = `<p>${explanation}</p><p><strong>Suggestions:</strong> ${suggestions}</p>`;
+}
+
+function generatePassword() {
+  const length = parseInt(document.getElementById('length').value);
+  const includeAlphabet = document.getElementById('alphabet').checked;
+  const includeNumber = document.getElementById('number').checked;
+  const includeSpecial = document.getElementById('special').checked;
+
+  let alphaChars = 'abcdefghijklmnopqrstuvwxyz';
+  if (settings.includeUppercase) {
+    alphaChars += 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+  }
+  if (settings.excludeSimilar) {
+    alphaChars = alphaChars.replace(/[ilo]/gi, ''); // g for global, i for case-insensitive
+  }
+  let numChars = settings.excludeSimilar ? '23456789' : '0123456789';
+  const specialChars = '!@#$%^&*()_+';
+
+  let availableChars = '';
+  let password = [];
+
+  if (includeAlphabet) availableChars += alphaChars;
+  if (includeNumber) availableChars += numChars;
+  if (includeSpecial) availableChars += specialChars;
+
+  if (availableChars.length === 0) {
+    document.getElementById('password').value = '';
+    calculateEntropy();
+    return;
+  }
+
+  // Guarantee minimums
+  if (includeAlphabet) {
+    for (let i = 0; i < settings.minAlphabet; i++) {
+      const rand = crypto.getRandomValues(new Uint32Array(1))[0];
+      password.push(alphaChars[rand % alphaChars.length]);
+    }
+  }
+  if (includeNumber) {
+    for (let i = 0; i < settings.minNumber; i++) {
+      const rand = crypto.getRandomValues(new Uint32Array(1))[0];
+      password.push(numChars[rand % numChars.length]);
+    }
+  }
+  if (includeSpecial) {
+    for (let i = 0; i < settings.minSpecial; i++) {
+      const rand = crypto.getRandomValues(new Uint32Array(1))[0];
+      password.push(specialChars[rand % specialChars.length]);
     }
   }
 
-  // Shuffle the generated password
-  password = password.split("").sort(() => Math.random() - 0.5).join("");
+  // Fill the remainder
+  const remainingLength = length - password.length;
+  for (let i = 0; i < remainingLength; i++) {
+    const rand = crypto.getRandomValues(new Uint32Array(1))[0];
+    password.push(availableChars[rand % availableChars.length]);
+  }
 
-  document.getElementById("password").value = password;
+  shuffleArray(password);
+  document.getElementById('password').value = password.join('');
+
   calculateEntropy();
 
-  // Add 'password-generated' class to the button for animation
-  const generateButton = document.querySelector('.btn-primary');
+  const generateButton = document.querySelector('.generate-btn');
   generateButton.classList.add('password-generated');
-  
-  // Remove the 'password-generated' class after the animation is complete
   setTimeout(() => {
     generateButton.classList.remove('password-generated');
   }, 1000);
 }
 
-function copyPassword() {
-  const passwordInput = document.getElementById("password");
-  passwordInput.select();
-  passwordInput.setSelectionRange(0, 99999); // For mobile devices
-  document.execCommand("copy");
-  
-  const copyMessage = document.getElementById("copyMessage");
-  copyMessage.textContent = "Password copied to clipboard!";
-  setTimeout(function() {
-    copyMessage.textContent = "";
-  }, 2000);
+async function copyPassword() {
+  const passwordInput = document.getElementById('password');
+  if (!passwordInput.value) return;
 
-  // Add 'password-copied' class to the copy button for animation
-  const copyButton = document.querySelector('.copy-btn');
-  copyButton.classList.add('password-copied');
-  
-  // Remove the 'password-copied' class after the animation is complete
-  setTimeout(() => {
-    copyButton.classList.remove('password-copied');
-  }, 1000);
+  try {
+    await navigator.clipboard.writeText(passwordInput.value);
+    const copyMessage = document.getElementById('copyMessage');
+    copyMessage.textContent = 'Password copied to clipboard!';
+    setTimeout(() => (copyMessage.textContent = ''), 2000);
+
+    const copyButton = document.querySelector('.copy-btn');
+    copyButton.classList.add('password-copied');
+    setTimeout(() => copyButton.classList.remove('password-copied'), 1000);
+  } catch (err) {
+    console.error('Failed to copy: ', err);
+  }
 }
 
-// Generate password on page load
-window.onload = function() {
-  generatePassword();
-};
+// --- MODAL & SETTINGS LOGIC ---
+const settingsModal = document.getElementById('settings-modal');
 
-// Open the settings modal
 function openSettingsModal() {
-  document.getElementById("excludeSimilar").checked = settings.excludeSimilar;
-  document.getElementById("includeUppercase").checked = settings.includeUppercase;
-  document.getElementById("minAlphabet").value = settings.minAlphabet;
-  document.getElementById("minNumber").value = settings.minNumber;
-  document.getElementById("minSpecial").value = settings.minSpecial;
-
-  $('#settingsModal').modal('show');
+  document.getElementById('excludeSimilar').checked = settings.excludeSimilar;
+  document.getElementById('includeUppercase').checked = settings.includeUppercase;
+  document.getElementById('minAlphabet').value = settings.minAlphabet;
+  document.getElementById('minNumber').value = settings.minNumber;
+  document.getElementById('minSpecial').value = settings.minSpecial;
+  settingsModal.showModal();
 }
 
-// Save the settings and update the password
+function closeSettingsModal() {
+  settingsModal.close();
+}
+
 function saveSettings() {
-  settings.excludeSimilar = document.getElementById("excludeSimilar").checked;
-  settings.includeUppercase = document.getElementById("includeUppercase").checked;
-  settings.minAlphabet = parseInt(document.getElementById("minAlphabet").value);
-  settings.minNumber = parseInt(document.getElementById("minNumber").value);
-  settings.minSpecial = parseInt(document.getElementById("minSpecial").value);
+  settings.excludeSimilar = document.getElementById('excludeSimilar').checked;
+  settings.includeUppercase = document.getElementById('includeUppercase').checked;
+  settings.minAlphabet = parseInt(document.getElementById('minAlphabet').value);
+  settings.minNumber = parseInt(document.getElementById('minNumber').value);
+  settings.minSpecial = parseInt(document.getElementById('minSpecial').value);
 
   localStorage.setItem('passwordSettings', JSON.stringify(settings));
-
-  $('#settingsModal').modal('hide');
+  closeSettingsModal();
   generatePassword();
 }
 
-// Load settings from local storage
 function loadSettings() {
   const storedSettings = localStorage.getItem('passwordSettings');
   if (storedSettings) {
     settings = JSON.parse(storedSettings);
   }
 }
+
+// --- Main execution block ---
+document.addEventListener('DOMContentLoaded', () => {
+  loadSettings();
+
+  const lengthSlider = document.getElementById('length');
+  const generateBtn = document.querySelector('.generate-btn');
+  const copyBtn = document.querySelector('.copy-btn');
+  const openSettingsBtn = document.getElementById('open-settings-btn');
+  const closeSettingsBtns = document.querySelectorAll('.close, [data-target="settings-modal"]');
+  const saveSettingsBtn = document.getElementById('save-settings-btn');
+  const checkboxes = document.querySelectorAll(
+    'article input[type="checkbox"]',
+  );
+
+  lengthSlider.addEventListener('input', (e) =>
+    updateLengthValue(e.target.value),
+  );
+  generateBtn.addEventListener('click', generatePassword);
+  copyBtn.addEventListener('click', copyPassword);
+  openSettingsBtn.addEventListener('click', openSettingsModal);
+  saveSettingsBtn.addEventListener('click', saveSettings);
+  closeSettingsBtns.forEach((btn) =>
+    btn.addEventListener('click', closeSettingsModal),
+  );
+  checkboxes.forEach((box) => box.addEventListener('change', calculateEntropy));
+
+  generatePassword();
+});
