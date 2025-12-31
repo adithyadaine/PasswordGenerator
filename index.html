@@ -3,9 +3,8 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Password Generator</title>
+    <title>Aegis Password Generator</title>
 
-    <!-- This assumes you have a styles.css file in the same folder -->
     <link rel="stylesheet" href="./styles.css" />
 
     <!-- Google Fonts -->
@@ -20,14 +19,23 @@
     <link
       rel="icon"
       type="image/png"
-      href="img/static/password-generator.png"
+      href="./img/static/aegis-logo.png"
     />
   </head>
   <body>
     <!-- Header -->
     <header class="container">
       <nav>
-        <strong>Password Generator</strong>
+        <div class="brand-wrapper">
+          <img
+            src="./img/static/aegis-logo.png"
+            alt="Aegis Logo"
+            class="brand-logo"
+            width="24"
+            height="24"
+          />
+          <strong>Aegis</strong>
+        </div>
         <button class="contrast outline" id="open-settings-btn">
           Settings
         </button>
@@ -70,20 +78,18 @@
         <!-- Generate Button -->
         <button class="generate-btn">
           <span class="generate-text">Generate Password</span>
-          <span class="checkmark">&#10004;</span>
+          <!-- <span class="checkmark">&#10004;</span> -->
         </button>
 
-        <!-- Password Display (no longer in a grid) -->
         <input
           type="text"
           id="password"
           readonly
           placeholder="Your password will appear here"
         />
-        <!-- Copy Button (now on its own line) -->
         <button class="copy-btn secondary">
           <span class="copy-text">Copy</span>
-          <span class="checkmark">&#10004;</span>
+          <!-- <span class="checkmark">&#10004;</span> -->
         </button>
 
         <div id="copyMessage" class="copy-message"></div>

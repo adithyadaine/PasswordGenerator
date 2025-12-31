@@ -1,0 +1,22 @@
+{
+  "manifest_version": 3,
+  "name": "Aegis Password Generator",
+  "version": "4.0.0",
+  "description": "A modern, secure, and feature-rich password generator.",
+  "action": {
+    "default_popup": "index.html",
+    "default_icon": {
+      "16": "img/static/aegis-logo.png",
+      "48": "img/static/aegis-logo.png",
+      "128": "img/static/aegis-logo.png"
+    }
+  },
+  "permissions": [
+    "storage"
+  ],
+  "icons": {
+    "16": "img/static/aegis-logo.png",
+    "48": "img/static/aegis-logo.png",
+    "128": "img/static/aegis-logo.png"
+  }
+}
