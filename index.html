@@ -3,9 +3,8 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Password Generator</title>
+    <title>Aegis Password Generator</title>
 
-    <!-- This assumes you have a styles.css file in the same folder -->
     <link rel="stylesheet" href="./styles.css" />
 
     <!-- Google Fonts -->
@@ -20,6 +19,13 @@
     <link
       rel="icon"
       type="image/png"
+      href="./img/static/aegis-circle.png"
+    />
+
+    <!-- Favicon (Update path if needed) -->
+    <link
+      rel="icon"
+      type="image/png"
       href="img/static/password-generator.png"
     />
   </head>
@@ -27,7 +33,16 @@
     <!-- Header -->
     <header class="container">
       <nav>
-        <strong>Password Generator</strong>
+        <div class="brand-wrapper">
+          <img
+            src="./img/static/aegis-circle.png"
+            alt="Aegis Logo"
+            class="brand-logo"
+            width="24"
+            height="24"
+          />
+          <strong>Aegis</strong>
+        </div>
         <button class="contrast outline" id="open-settings-btn">
           Settings
         </button>
@@ -94,13 +109,13 @@
           <strong id="strength"></strong>
           <div id="strengthExplanation"></div>
         </section>
+
+        <!-- Footer inside the card -->
+        <footer class="card-footer">
+            <span id="copyrightYear">© Password Generator. Maintained with ❤️ by Adithya D M.</span>
+        </footer>
       </article>
     </main>
-
-    <!-- Footer -->
-    <footer class="container">
-      <small>&copy; 2025 Password Generator. Maintained with ❤️ by Adithya D M.</small>
-    </footer>
 
     <!-- Modal for Settings -->
     <dialog id="settings-modal">

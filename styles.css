@@ -41,6 +41,9 @@ body {
   margin: 0;
   display: flex;
   flex-direction: column;
+  width: 400px; /* Restored width */
+  min-height: 300px; /* Restored height */
+  overflow-x: hidden;
 }
 
 /* --- Layout --- */
@@ -80,12 +83,16 @@ header nav strong {
   font-size: 1.25rem;
   font-weight: 600;
 }
-footer {
-  flex-shrink: 0;
+
+/* --- Footer (Internal) --- */
+.card-footer {
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border-color);
   text-align: center;
-  padding: 1.5rem 0;
+  font-size: 0.8rem;
   color: var(--muted-text-color);
-  font-size: 0.9rem;
+  width: 100%;
 }
 
 /* --- Buttons --- */
@@ -127,13 +134,20 @@ button,
 }
 
 /* Settings Button (outline) */
-#open-settings-btn {
-  background-color: transparent;
-  border: 2px solid var(--border-color);
-  color: var(--text-color);
-}
 #open-settings-btn:hover {
   background-color: var(--border-color);
+}
+
+.brand-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.brand-logo {
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
+  border-radius: 50%; /* Fully circular */
 }
 
 /* --- Form Elements --- */

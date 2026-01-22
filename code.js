@@ -241,3 +241,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
   generatePassword();
 });
+
+// --- Update copyright year ---
+function updateCopyrightYear() {
+    const yearElem = document.getElementById("copyrightYear");
+    if (yearElem) {
+        yearElem.textContent = `© ${new Date().getFullYear()} Password Generator. Maintained with ❤️ by Adithya D M.`;
+    }
+}  
+
+updateCopyrightYear();
