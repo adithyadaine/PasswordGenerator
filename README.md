@@ -1,67 +1,56 @@
-# Secure Password Generator
+# Aegis Password Generator (Chrome Extension)
 
-A modern, secure, and feature-rich password generator built with vanilla HTML, CSS, and JavaScript. This application provides users with cryptographically strong passwords and real-time feedback on their security strength, all wrapped in a clean, responsive, dark-themed UI.
+A modern, secure, and feature-rich Chrome extension built with vanilla HTML, CSS, and JavaScript. This extension provides users with cryptographically strong passwords and real-time feedback on their security strength, all wrapped in a clean, compact, and responsive dark-themed popup UI.
 
-[![Deploy with GitHub Pages](https://img.shields.io/badge/Deploy-GitHub_Pages-222222?logo=github)](https://your-username.github.io/your-repository-name/)
+[![Chrome Web Store](https://img.shields.io/badge/Extension-Chrome-blue?logo=google-chrome)](https://chrome.google.com/webstore)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 
-**Live Demo:** [https://your-username.github.io/your-repository-name/](https://your-username.github.io/your-repository-name/)
-
-![Password Generator Screenshot](./img/static/screenshot.png)
+![Password Generator Extension Screenshot](./img/static/screenshot.png)
 
 ## About The Project
 
-This project started as a simple password generator and evolved into a robust, security-focused web application. The goal was to build a tool that not only creates strong passwords but also educates the user on password security concepts like entropy. It was built with modern web standards, prioritizing performance, security, and a clean user experience without relying on external frameworks like jQuery or Bootstrap.
+This project evolved from a standalone site into a robust, security-focused Chrome extension. The goal was to create a tool that is always just a click away, providing strong passwords while educating users on security concepts like entropy. It prioritize performance and security, using modern web standards without external frameworks.
 
 ## Features
 
--   🔐 **Cryptographically Secure:** Uses the `window.crypto` API for generating truly unpredictable random numbers, instead of the insecure `Math.random()`.
--   🎛️ **Customizable Options:** Users can easily control password length and include/exclude character sets (alphabets, numbers, special characters).
--   ⚙️ **Advanced Settings:** A settings modal allows for fine-tuned control, including:
-    -   Excluding similar-looking characters (e.g., `i`, `l`, `1`, `O`, `0`).
-    -   Enforcing minimum character type requirements (e.g., at least 1 number).
--   📊 **Real-Time Strength Analysis:** Calculates password entropy in bits and provides instant feedback on its strength (Weak, Medium, Strong) with actionable suggestions.
--   ✨ **Secure Shuffle Algorithm:** Implements the Fisher-Yates shuffle algorithm to ensure the final character order is completely random and unbiased.
--   📋 **One-Click Copy:** A convenient copy-to-clipboard button with clear user feedback.
--   💾 **Persistent Settings:** User preferences are automatically saved to `localStorage`, so they are remembered on the next visit.
--   📱 **Fully Responsive Design:** A sleek, modern dark theme that looks great on all devices, from mobile phones to desktops.
+-   🔐 **Cryptographically Secure:** Uses the `window.crypto` API for generating truly unpredictable characters, ensuring professional-grade security.
+-   ⚡ **Real-Time Generation:** Passwords update instantly as you adjust the length slider or toggle character sets.
+-   🎛️ **Customizable Options:** Easily control length and include/exclude alphabets, numbers, and symbols.
+-   ⚙️ **Advanced Settings:** Fine-tuned control via the settings modal:
+    -   Exclude similar-looking characters (e.g., `i`, `l`, `1`, `O`, `0`).
+    -   Enforce minimum character type requirements (e.g., at least 1 number).
+-   📊 **Strength Analysis:** Calculates real-time entropy in bits with actionable feedback (Weak, Medium, Strong).
+-   ✨ **Secure Shuffle:** Uses the Fisher-Yates algorithm to ensure character order is completely unbiased.
+-   📋 **One-Click Copy:** Fast copying with clear checkmark feedback.
+-   💾 **Persistent Chrome Storage:** Uses `chrome.storage.local` to remember your settings across browser sessions.
+-   🎨 **Compact Dark UI:** Optimized for a scroll-free experience within the 400px Chrome popup window.
 
 ## Tech Stack
 
-This project was built from the ground up using core web technologies, with a focus on modern best practices.
+Built from the ground up with a focus on modern best practices and zero dependencies.
 
--   **HTML5:** Structured with semantic tags (`<article>`, `<section>`, `<dialog>`) for improved accessibility and SEO.
--   **CSS3:** Custom-styled with a mobile-first approach. Uses modern features like CSS Custom Properties (Variables), Flexbox, and Grid for a clean and maintainable dark-theme design.
--   **Vanilla JavaScript (ES6+):** All logic is handled with modern JavaScript, including:
-    -   The **Web Crypto API** for secure random number generation.
-    -   The native **`<dialog>` element** for the settings modal, removing external dependencies.
-    -   The **Clipboard API** for secure copying.
-    -   **Event Listeners** to cleanly separate behavior (JS) from structure (HTML).
+-   **Manifest V3:** Configured for the latest Chrome extension standards.
+-   **HTML5/CSS3:** Semantic structure and custom-styled with Variables, Flexbox, and Grid for a premium dark theme.
+-   **Vanilla JavaScript (ES6+):** Pure logic using modern APIs (Web Crypto, Clipboard, Storage).
 
-## Project Journey & Key Learnings
+## How To Install (Developer Mode)
 
-This project served as a deep dive into modern front-end development practices, focusing on security and performance.
+Since this is currently an unpacked project, follow these steps to use it:
 
--   **Security First:** The most significant learning was the critical difference between `Math.random()` and the Web Crypto API. Refactoring the core generation logic to be cryptographically secure was a major milestone.
--   **Dependency Elimination:** The project was intentionally refactored from an initial Bootstrap and jQuery-based structure to a pure "vanilla" stack. This process highlighted the power of modern CSS and JavaScript APIs (like the native `<dialog>` element) to achieve complex UI without the overhead of large frameworks.
--   **Separation of Concerns:** A key goal was to remove all JavaScript calls (`onclick`, etc.) from the HTML, instead attaching all behavior through event listeners in the `code.js` file. This resulted in much cleaner, more maintainable code.
--   **Deployment & Paths:** Successfully deploying to GitHub Pages brought practical experience in debugging common issues, such as fixing broken CSS links by understanding the difference between relative and absolute file paths.
-
-## How To Run Locally
-
-This project requires no complex build steps.
-
-1.  **Clone the repository:**
+1.  **Clone/Download the repository:**
     ```bash
     git clone https://github.com/your-username/your-repository-name.git
     ```
-2.  **Navigate to the project directory:**
-    ```bash
-    cd your-repository-name
-    ```
-3.  **Open `index.html` in your browser.**
-    -   You can simply double-click the file.
-    -   For the best experience, use a live server extension (like "Live Server" in VS Code) to run it on a local development server.
+2.  **Open Chrome Extensions Page:**
+    -   Type `chrome://extensions/` in your address bar.
+    -   Alternatively, go to **Settings > Extensions**.
+3.  **Enable Developer Mode:**
+    -   Toggle the switch in the top-right corner.
+4.  **Load Unpacked Extension:**
+    -   Click the **"Load unpacked"** button.
+    -   Select the project folder containing `manifest.json`.
+5.  **Pin to Toolbar:**
+    -   Click the "Extensions" (puzzle piece) icon in your toolbar and pin **Secure Password Generator**.
 
 ## License
 

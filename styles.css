@@ -6,9 +6,8 @@
   --muted-text-color: #8a93a5;
   --border-color: #3e475e;
 
-  /* Monocolor accent replaces the gradient variables */
-  --accent-color: #2575fc; /* For checkboxes, highlights, and buttons */
-  --accent-hover-color: #1a66e0; /* A slightly darker blue for hover */
+  --accent-color: #2575fc;
+  --accent-hover-color: #1a66e0;
 
   --secondary-color: #3e475e;
   --secondary-hover-color: #4f5a72;
@@ -51,7 +50,7 @@ body {
   width: 100%;
   max-width: 960px;
   margin: 0 auto;
-  padding: 0 1rem;
+  padding: 0 0.75rem; /* Reduced from 1rem */
 }
 
 main.container {
@@ -59,17 +58,17 @@ main.container {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 2rem 1rem;
+  padding: 0.1rem; /* Reduced from 0.5rem */
 }
 
 article {
   background-color: var(--card-bg-color);
   border-radius: var(--border-radius);
-  padding: 2.5rem;
+  padding: 0.75rem; /* Reduced from 1rem */
   width: 100%;
-  max-width: 550px;
+  max-width: 360px; /* Reduced from 380px */
   border: 1px solid var(--border-color);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
 }
 
 /* --- Header & Footer --- */
@@ -77,10 +76,21 @@ header nav {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1.5rem 0;
+  padding: 0.5rem 0; /* Reduced from 0.75rem */
+}
+.brand-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.brand-logo {
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
+  border-radius: 6px; /* Rounded corners for icon look */
 }
 header nav strong {
-  font-size: 1.25rem;
+  font-size: 1.1rem; /* Smaller title */
   font-weight: 600;
 }
 
@@ -99,8 +109,8 @@ header nav strong {
 button,
 .button {
   font-family: var(--font-primary);
-  font-size: 1rem;
-  padding: 12px 24px;
+  font-size: 0.9rem; /* Smaller font */
+  padding: 10px 20px; /* Smaller padding */
   border-radius: var(--border-radius);
   font-weight: 600;
   transition: all 0.2s ease-in-out;
@@ -115,7 +125,7 @@ button,
   background-color: var(--accent-color);
   color: white;
   width: 100%;
-  margin: 1.5rem 0;
+  margin: 0.75rem 0; /* Reduced from 1rem */
 }
 .generate-btn:hover {
   background-color: var(--accent-hover-color);
@@ -134,6 +144,11 @@ button,
 }
 
 /* Settings Button (outline) */
+#open-settings-btn {
+  background-color: transparent;
+  border: 2px solid var(--border-color);
+  color: var(--text-color);
+}
 #open-settings-btn:hover {
   background-color: var(--border-color);
 }
@@ -153,23 +168,24 @@ button,
 /* --- Form Elements --- */
 label {
   display: block;
-  margin-bottom: 0.75rem;
+  margin-bottom: 0.5rem; /* Reduced from 0.75rem */
   font-weight: 600;
+  font-size: 0.9rem;
 }
 
 #password {
   font-family: var(--font-monospace);
-  font-size: 1.25rem;
+  font-size: 1.1rem; /* Smaller font */
   text-align: center;
   font-weight: 600;
   background-color: var(--bg-color);
   border: 1px solid var(--border-color);
   border-radius: var(--border-radius);
   color: var(--text-color);
-  padding: 12px;
+  padding: 10px; /* Reduced padding */
   width: 100%;
   box-sizing: border-box;
-  margin-bottom: 1rem;
+  margin-bottom: 0.75rem; /* Reduced margin */
 }
 
 /* Custom Range Slider */
@@ -177,11 +193,11 @@ input[type='range'] {
   -webkit-appearance: none;
   appearance: none;
   width: 100%;
-  height: 6px;
+  height: 5px; /* Thinner */
   background: var(--secondary-color);
   border-radius: 5px;
   outline: none;
-  margin: 1rem 0 2rem 0;
+  margin: 0.5rem 0 1rem 0; /* Reduced from 0.75rem 0 1.5rem 0 */
 }
 input[type='range']::-webkit-slider-thumb {
   -webkit-appearance: none;
@@ -209,10 +225,10 @@ fieldset {
   margin: 0;
 }
 fieldset legend {
-  font-size: 1rem;
+  font-size: 0.9rem;
   font-weight: 600;
   padding: 0;
-  margin-bottom: 1rem;
+  margin-bottom: 0.5rem; /* Reduced margin */
 }
 fieldset label {
   display: flex;
@@ -256,7 +272,7 @@ input[type='checkbox']:checked::before {
 /* --- Strength Info & Messages --- */
 .strength-section {
   text-align: center;
-  margin-top: 2rem;
+  margin-top: 1rem; /* Reduced from 1.25rem */
 }
 #entropy,
 #strength {
@@ -265,11 +281,11 @@ input[type='checkbox']:checked::before {
 }
 #strengthExplanation {
   background-color: var(--bg-color);
-  padding: 1rem;
+  padding: 0.75rem; /* Reduced padding */
   border-radius: var(--border-radius);
   border: 1px solid var(--border-color);
-  margin-top: 1rem;
-  font-size: 0.9rem;
+  margin-top: 0.75rem; /* Reduced margin */
+  font-size: 0.8rem; /* Smaller font */
   text-align: left;
   color: var(--muted-text-color);
 }
@@ -293,26 +309,6 @@ input[type='checkbox']:checked::before {
   color: var(--strength-strong);
 }
 
-/* --- Button Animations (Same as before) --- */
-.generate-text,
-.copy-text {
-  display: inline-block;
-  transition: opacity 0.3s ease-out;
-}
-.checkmark {
-  display: inline-block;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  opacity: 0;
-  font-size: 1.2em;
-  transition: opacity 0.3s ease-in;
-}
-.password-generated .generate-text,
-.password-copied .copy-text {
-  opacity: 0;
-}
 .password-generated .checkmark,
 .password-copied .checkmark {
   opacity: 1;

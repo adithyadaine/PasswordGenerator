@@ -23,25 +23,44 @@ function shuffleArray(array) {
 
 function updateLengthValue(value) {
   document.getElementById('length-value').textContent = value;
-  calculateEntropy();
+  generatePassword(true); // Call generatePassword and skip animation
+}
+
+/**
+ * Centralized character set logic.
+ * Returns an object with the available characters for each set.
+ */
+function getCharacterSets() {
+  const includeAlphabet = document.getElementById('alphabet').checked;
+  const includeNumber = document.getElementById('number').checked;
+  const includeSpecial = document.getElementById('special').checked;
+
+  let alphaChars = 'abcdefghijklmnopqrstuvwxyz';
+  if (settings.includeUppercase) {
+    alphaChars += 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+  }
+  if (settings.excludeSimilar) {
+    alphaChars = alphaChars.replace(/[ilo]/gi, '');
+  }
+
+  let numChars = settings.excludeSimilar ? '23456789' : '0123456789';
+  const specialChars = '!@#$%^&*()_+';
+
+  return {
+    alpha: includeAlphabet ? alphaChars : '',
+    number: includeNumber ? numChars : '',
+    special: includeSpecial ? specialChars : '',
+    all:
+      (includeAlphabet ? alphaChars : '') +
+      (includeNumber ? numChars : '') +
+      (includeSpecial ? specialChars : ''),
+  };
 }
 
 function calculateEntropy() {
   const length = parseInt(document.getElementById('length').value);
-  let charsetSize = 0;
-
-  if (document.getElementById('alphabet').checked) {
-    let alphaSize = 26; // lowercase
-    if (settings.includeUppercase) alphaSize += 26; // uppercase
-    if (settings.excludeSimilar) alphaSize -= 6; // i, l, 1, O, 0 (approx)
-    charsetSize += alphaSize;
-  }
-  if (document.getElementById('number').checked) {
-    charsetSize += settings.excludeSimilar ? 8 : 10;
-  }
-  if (document.getElementById('special').checked) {
-    charsetSize += 12; // Based on your special character set
-  }
+  const charSets = getCharacterSets();
+  const charsetSize = charSets.all.length;
 
   if (charsetSize === 0) {
     document.getElementById('entropy').textContent = 'Entropy: 0.00 bits';
@@ -92,52 +111,35 @@ function calculateEntropy() {
   ).innerHTML = `<p>${explanation}</p><p><strong>Suggestions:</strong> ${suggestions}</p>`;
 }
 
-function generatePassword() {
+function generatePassword(skipAnimation = false) {
   const length = parseInt(document.getElementById('length').value);
-  const includeAlphabet = document.getElementById('alphabet').checked;
-  const includeNumber = document.getElementById('number').checked;
-  const includeSpecial = document.getElementById('special').checked;
+  const charSets = getCharacterSets();
 
-  let alphaChars = 'abcdefghijklmnopqrstuvwxyz';
-  if (settings.includeUppercase) {
-    alphaChars += 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-  }
-  if (settings.excludeSimilar) {
-    alphaChars = alphaChars.replace(/[ilo]/gi, ''); // g for global, i for case-insensitive
-  }
-  let numChars = settings.excludeSimilar ? '23456789' : '0123456789';
-  const specialChars = '!@#$%^&*()_+';
-
-  let availableChars = '';
-  let password = [];
-
-  if (includeAlphabet) availableChars += alphaChars;
-  if (includeNumber) availableChars += numChars;
-  if (includeSpecial) availableChars += specialChars;
-
-  if (availableChars.length === 0) {
+  if (charSets.all.length === 0) {
     document.getElementById('password').value = '';
     calculateEntropy();
     return;
   }
 
+  let password = [];
+
   // Guarantee minimums
-  if (includeAlphabet) {
+  if (charSets.alpha) {
     for (let i = 0; i < settings.minAlphabet; i++) {
       const rand = crypto.getRandomValues(new Uint32Array(1))[0];
-      password.push(alphaChars[rand % alphaChars.length]);
+      password.push(charSets.alpha[rand % charSets.alpha.length]);
     }
   }
-  if (includeNumber) {
+  if (charSets.number) {
     for (let i = 0; i < settings.minNumber; i++) {
       const rand = crypto.getRandomValues(new Uint32Array(1))[0];
-      password.push(numChars[rand % numChars.length]);
+      password.push(charSets.number[rand % charSets.number.length]);
     }
   }
-  if (includeSpecial) {
+  if (charSets.special) {
     for (let i = 0; i < settings.minSpecial; i++) {
       const rand = crypto.getRandomValues(new Uint32Array(1))[0];
-      password.push(specialChars[rand % specialChars.length]);
+      password.push(charSets.special[rand % charSets.special.length]);
     }
   }
 
@@ -145,7 +147,7 @@ function generatePassword() {
   const remainingLength = length - password.length;
   for (let i = 0; i < remainingLength; i++) {
     const rand = crypto.getRandomValues(new Uint32Array(1))[0];
-    password.push(availableChars[rand % availableChars.length]);
+    password.push(charSets.all[rand % charSets.all.length]);
   }
 
   shuffleArray(password);
@@ -153,11 +155,13 @@ function generatePassword() {
 
   calculateEntropy();
 
-  const generateButton = document.querySelector('.generate-btn');
-  generateButton.classList.add('password-generated');
-  setTimeout(() => {
-    generateButton.classList.remove('password-generated');
-  }, 1000);
+  if (!skipAnimation) {
+    const generateButton = document.querySelector('.generate-btn');
+    generateButton.classList.add('password-generated');
+    setTimeout(() => {
+      generateButton.classList.remove('password-generated');
+    }, 1000);
+  }
 }
 
 async function copyPassword() {
@@ -201,45 +205,65 @@ function saveSettings() {
   settings.minNumber = parseInt(document.getElementById('minNumber').value);
   settings.minSpecial = parseInt(document.getElementById('minSpecial').value);
 
-  localStorage.setItem('passwordSettings', JSON.stringify(settings));
+  if (typeof chrome !== 'undefined' && chrome.storage && chrome.storage.local) {
+    chrome.storage.local.set({ passwordSettings: settings }, () => {
+      console.log('Settings saved to chrome.storage.local');
+    });
+  } else {
+    localStorage.setItem('passwordSettings', JSON.stringify(settings));
+  }
   closeSettingsModal();
   generatePassword();
 }
 
-function loadSettings() {
-  const storedSettings = localStorage.getItem('passwordSettings');
-  if (storedSettings) {
-    settings = JSON.parse(storedSettings);
+function loadSettings(callback) {
+  if (typeof chrome !== 'undefined' && chrome.storage && chrome.storage.local) {
+    chrome.storage.local.get(['passwordSettings'], (result) => {
+      if (result.passwordSettings) {
+        settings = result.passwordSettings;
+      }
+      if (callback) callback();
+    });
+  } else {
+    const storedSettings = localStorage.getItem('passwordSettings');
+    if (storedSettings) {
+      settings = JSON.parse(storedSettings);
+    }
+    if (callback) callback();
   }
 }
 
 // --- Main execution block ---
 document.addEventListener('DOMContentLoaded', () => {
-  loadSettings();
+  loadSettings(() => {
+    const lengthSlider = document.getElementById('length');
+    const generateBtn = document.querySelector('.generate-btn');
+    const copyBtn = document.querySelector('.copy-btn');
+    const openSettingsBtn = document.getElementById('open-settings-btn');
+    const closeSettingsBtns = document.querySelectorAll(
+      '.close, [data-target="settings-modal"]',
+    );
+    const saveSettingsBtn = document.getElementById('save-settings-btn');
+    const checkboxes = document.querySelectorAll(
+      'article input[type="checkbox"]',
+    );
 
-  const lengthSlider = document.getElementById('length');
-  const generateBtn = document.querySelector('.generate-btn');
-  const copyBtn = document.querySelector('.copy-btn');
-  const openSettingsBtn = document.getElementById('open-settings-btn');
-  const closeSettingsBtns = document.querySelectorAll('.close, [data-target="settings-modal"]');
-  const saveSettingsBtn = document.getElementById('save-settings-btn');
-  const checkboxes = document.querySelectorAll(
-    'article input[type="checkbox"]',
-  );
+    lengthSlider.addEventListener('input', (e) =>
+      updateLengthValue(e.target.value),
+    );
+    generateBtn.addEventListener('click', generatePassword);
+    copyBtn.addEventListener('click', copyPassword);
+    openSettingsBtn.addEventListener('click', openSettingsModal);
+    saveSettingsBtn.addEventListener('click', saveSettings);
+    closeSettingsBtns.forEach((btn) =>
+      btn.addEventListener('click', closeSettingsModal),
+    );
+    checkboxes.forEach((box) =>
+      box.addEventListener('change', () => generatePassword(true)),
+    );
 
-  lengthSlider.addEventListener('input', (e) =>
-    updateLengthValue(e.target.value),
-  );
-  generateBtn.addEventListener('click', generatePassword);
-  copyBtn.addEventListener('click', copyPassword);
-  openSettingsBtn.addEventListener('click', openSettingsModal);
-  saveSettingsBtn.addEventListener('click', saveSettings);
-  closeSettingsBtns.forEach((btn) =>
-    btn.addEventListener('click', closeSettingsModal),
-  );
-  checkboxes.forEach((box) => box.addEventListener('change', calculateEntropy));
-
-  generatePassword();
+    generatePassword();
+  });
 });
 
 // --- Update copyright year ---
